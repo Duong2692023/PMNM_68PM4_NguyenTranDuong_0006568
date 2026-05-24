@@ -4,7 +4,8 @@ class Database {
     protected $servername = "localhost";
     protected $username = "root";
     protected $password = "";
-    protected $dbname = "mvc_demo"; // Tên database đã tạo ở Bước 1
+    // Đổi mvc_demo thành tên database thực tế của bạn
+    protected $dbname = "pmnm_68pm4_nguyentranduong_0006568";
 
     public function __construct() {
         try {

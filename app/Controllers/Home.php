@@ -1,19 +1,20 @@
 <?php
-class Home extends Controller {
+class home extends Controller {
     
-    // Action mặc định
+    // Trang chủ sau khi đăng nhập
     public function index() {
-        // 1. Gọi Model StudentModel
-        $studentModel = $this->model('StudentModel');
-        
-        // 2. Lấy dữ liệu từ database
-        $listStudents = $studentModel->getAllStudents();
+        // Truyền tên username sang View
+        $this->view('home/index', ['username' => $_SESSION['username'] ?? '']);
+    }
 
-        // 3. Gọi View và truyền dữ liệu dạng mảng key => value
-        $this->view('student_list', [
-            'page_title' => 'Danh sách sinh viên',
-            'students' => $listStudents
-        ]);
+    // Trang hiển thị form đăng nhập
+    public function login() {
+        // Nếu đã đăng nhập rồi thì không cho vào form login nữa
+        if (isset($_SESSION['username'])) {
+            header('Location: /PMNM_NguyenTranDuong_68PM4_0006568/public/home/index');
+            exit();
+        }
+        $this->view('home/login');
     }
 }
 ?>
