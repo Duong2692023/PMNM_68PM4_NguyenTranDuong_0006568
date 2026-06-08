@@ -4,13 +4,12 @@ session_start();
 
 class middleware {
     function checklogin() {
-        // Danh sách các trang không cần đăng nhập
-        // Lưu ý: Mình bổ sung thêm '/auth/login' vào mảng này so với trên bảng
-        // để form đăng nhập của bạn có thể gửi POST request đi mà không bị chặn lại.
-        $publicPages = ['/home/login', '/auth/login']; 
+        // Gắn thêm tên thư mục project vào
+        $basePath = '/PMNM_NguyenTranDuong_68PM4_0006568/public';
+        $publicPages = [$basePath . '/home/login', $basePath . '/auth/login']; 
         
         if (!isset($_SESSION['username']) && !in_array($_SERVER['REQUEST_URI'], $publicPages)) {
-            header('Location: /home/login');
+            header('Location: ' . $basePath . '/home/login');
             exit();
         }
     }
