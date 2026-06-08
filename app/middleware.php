@@ -1,22 +1,16 @@
 <?php
+require_once '../app/core/App.php';
+session_start();
+
 class middleware {
     function checklogin() {
-        // Khai báo đường dẫn gốc của project trên XAMPP
-        $basePath = '/PMNM_NguyenTranDuong_68PM4_0006568/public';
+        // Danh sách các trang không cần đăng nhập
+        // Lưu ý: Mình bổ sung thêm '/auth/login' vào mảng này so với trên bảng
+        // để form đăng nhập của bạn có thể gửi POST request đi mà không bị chặn lại.
+        $publicPages = ['/home/login', '/auth/login']; 
         
-        // Các trang không cần đăng nhập vẫn vào được
-        $publicPages = [
-            $basePath . '/',
-            $basePath . '/home/login',
-            $basePath . '/auth/login' // Cho phép gửi dữ liệu form vào auth
-        ];
-
-        // Lấy đường dẫn hiện tại mà người dùng đang truy cập
-        $currentUri = strtok($_SERVER['REQUEST_URI'], '?');
-
-        // Nếu chưa có session (chưa đăng nhập) VÀ đang vào một trang không nằm trong publicPages
-        if (!isset($_SESSION['username']) && !in_array($currentUri, $publicPages)) {
-            header('Location: ' . $basePath . '/home/login');
+        if (!isset($_SESSION['username']) && !in_array($_SERVER['REQUEST_URI'], $publicPages)) {
+            header('Location: /home/login');
             exit();
         }
     }
