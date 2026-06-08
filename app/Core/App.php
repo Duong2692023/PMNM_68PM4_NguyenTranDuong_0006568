@@ -36,9 +36,21 @@ class App
     }
 
     public function UrlProcess(){
+        // Cách 1: Ưu tiên lấy URL từ .htaccess (nếu đang chạy XAMPP)
         if (isset($_GET['url'])) {
             return explode('/', filter_var(trim($_GET['url'], '/'), FILTER_SANITIZE_URL));
         }
+
+        // Cách 2: Lấy trực tiếp từ thanh địa chỉ (khi chạy bằng PHP Built-in Server)
+        $requestUri = $_SERVER['REQUEST_URI'];
+        $requestUri = strtok($requestUri, '?'); // Cắt bỏ các tham số phía sau dấu ?
+        $requestUri = trim($requestUri, '/');   // Xóa dấu gạch chéo dư thừa
+
+        if (!empty($requestUri)) {
+            return explode('/', filter_var($requestUri, FILTER_SANITIZE_URL));
+        }
+
+        return []; // Trả về mảng rỗng nếu đang ở trang gốc
     }
 }
 ?>
