@@ -4,7 +4,7 @@ class auth extends Controller {
     protected $user = [
         'admin' => '123456',
         'hieulx' => '123456',
-        'duongnt' => '123456' // Bạn vẫn có thể giữ lại tài khoản của mình
+        'duongnt' => '123456' 
     ];
 
     public function login() {
@@ -15,12 +15,12 @@ class auth extends Controller {
             if (isset($this->user[$username]) && $this->user[$username] == $password) {
                 // Đăng nhập thành công
                 $_SESSION['username'] = $username;
-                header('Location: /home/index'); // Chuyển thành đường dẫn ngắn gọn
+                header('Location: /home/index'); 
                 exit();
             } else {
                 // Đăng nhập thất bại
                 $_SESSION['error'] = "Sai tên đăng nhập hoặc mật khẩu";
-                header('Location: /home/login'); // Chuyển thành đường dẫn ngắn gọn
+                header('Location: /home/login'); 
                 exit();
             }
         }
@@ -29,7 +29,7 @@ class auth extends Controller {
     public function logout() {
         session_unset();
         session_destroy();
-        header('Location: /home/login'); // Cập nhật lại đường dẫn
+        header('Location: /home/login'); 
         exit();
     }
 }
