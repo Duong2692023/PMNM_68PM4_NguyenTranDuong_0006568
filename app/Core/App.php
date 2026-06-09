@@ -11,14 +11,14 @@ class App
         
         if (isset($urlProcessed[0])) {
             $controllerName = ucfirst($urlProcessed[0]); 
-            if (file_exists('../app/controllers/' . $controllerName . '.php')) {
+            if (file_exists('../app/Controllers/' . $controllerName . '.php')) {
                 $this->controller = $controllerName;
                 unset($urlProcessed[0]);
             }
         }
         
-        require_once '../app/controllers/' . $this->controller . '.php';
-        $this->controller = new $this->controller;
+        require_once '../app/Controllers/' . $this->controller . '.php';
+        $this->controller = new $this->controller; 
 
         if (isset($urlProcessed[1])) {
             if (method_exists($this->controller, $urlProcessed[1])) {
@@ -27,7 +27,6 @@ class App
             }
         }
 
-        // Lấy Params
         $this->params = $urlProcessed ? array_values($urlProcessed) : [];
         call_user_func_array([$this->controller, $this->action], $this->params);
     }

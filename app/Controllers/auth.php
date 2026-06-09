@@ -1,5 +1,5 @@
 <?php
-class auth extends Controller {
+class Auth extends Controller {
 
     protected $user = [
         'admin' => '123456',
@@ -13,9 +13,8 @@ class auth extends Controller {
             $password = $_POST['password'] ?? '';
 
             if (isset($this->user[$username]) && $this->user[$username] == $password) {
-                // Đăng nhập thành công
                 $_SESSION['username'] = $username;
-                header('Location: /home/index'); 
+                header('Location: /home/index');
                 exit();
             } else {
                 // Đăng nhập thất bại

@@ -2,44 +2,57 @@
 require_once '../app/core/DB.php'; 
 
 class sinhvienModel {
-    public function getAll() {
-        $conn = ConnectDB::Connect(); 
-        $sql = "SELECT * FROM students";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    private $conn;
+
+    public function __construct() {
+        $this->conn = ConnectDB::Connect();
     }
 
-    // Lấy số lượng tổng cộng các sinh viên
-    public function getTotalCount() {
-        $conn = ConnectDB::Connect();
-        $sql = "SELECT COUNT(*) as total FROM students";
-        $stmt = $conn->prepare($sql);
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['total'];
-    }
-
-    // Lấy sinh viên với phân trang
-    public function getPaginated($limit = 5, $offset = 0) {
-        $conn = ConnectDB::Connect();
-        $sql = "SELECT * FROM students LIMIT :limit OFFSET :offset";
-        $stmt = $conn->prepare($sql);
+    public function paging($limit = 5, $offset = 0, $search = "") {
+        $query = "SELECT * FROM students WHERE hoten LIKE :search OR mssv LIKE :search LIMIT :limit OFFSET :offset";
+        $stmt = $this->conn->prepare($query);
+        $searchParam = "%$search%";
+        $stmt->bindParam(':search', $searchParam);
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
         $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $data = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        $queryTotal = "SELECT COUNT(*) FROM students WHERE hoten LIKE :search OR mssv LIKE :search";
+        $stmtTotal = $this->conn->prepare($queryTotal);
+        $stmtTotal->bindParam(':search', $searchParam);
+        $stmtTotal->execute();
+        $totalRecord = $stmtTotal->fetchColumn();
+
+        return [
+            'data' => $data,
+            'totalRecord' => $totalRecord
+        ];
     }
 
-    // Hàm tạo sinh viên mới
     public function create($mssv, $hoten, $lop) {
-        $conn = ConnectDB::Connect();
         $sql = "INSERT INTO students (mssv, hoten, lop) VALUES (:mssv, :hoten, :lop)";
-        $stmt = $conn->prepare($sql);
-        $stmt->bindParam(':mssv', $mssv);
-        $stmt->bindParam(':hoten', $hoten);
-        $stmt->bindParam(':lop', $lop);
-        return $stmt->execute(); // Trả về true nếu thành công
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([':mssv' => $mssv, ':hoten' => $hoten, ':lop' => $lop]);
+    }
+
+    public function getById($id) {
+        $sql = "SELECT * FROM students WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute([':id' => $id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public function update($id, $mssv, $hoten, $lop) {
+        $sql = "UPDATE students SET mssv = :mssv, hoten = :hoten, lop = :lop WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([':mssv' => $mssv, ':hoten' => $hoten, ':lop' => $lop, ':id' => $id]);
+    }
+
+    public function delete($id) {
+        $sql = "DELETE FROM students WHERE id = :id";
+        $stmt = $this->conn->prepare($sql);
+        return $stmt->execute([':id' => $id]);
     }
 }
-?>
+?> 
