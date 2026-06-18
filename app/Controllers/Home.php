@@ -7,7 +7,7 @@ class Home extends Controller {
 
     public function login() {
         if (isset($_SESSION['username'])) {
-            header('Location: /home/index');
+            header('Location: /PMNM_68PM4_NguyenTranDuong_0006568/public/index.php?url=home/index');
             exit();
         }
         $this->view('home/login');

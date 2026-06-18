@@ -14,12 +14,12 @@ class Auth extends Controller {
 
             if (isset($this->user[$username]) && $this->user[$username] == $password) {
                 $_SESSION['username'] = $username;
-                header('Location: /home/index');
+                header('Location: /PMNM_68PM4_NguyenTranDuong_0006568/public/index.php?url=home/index');
                 exit();
             } else {
                 // Đăng nhập thất bại
                 $_SESSION['error'] = "Sai tên đăng nhập hoặc mật khẩu";
-                header('Location: /home/login'); 
+                header('Location: /PMNM_68PM4_NguyenTranDuong_0006568/public/index.php?url=home/login'); 
                 exit();
             }
         }
@@ -28,7 +28,7 @@ class Auth extends Controller {
     public function logout() {
         session_unset();
         session_destroy();
-        header('Location: /home/login'); 
+        header('Location: /PMNM_68PM4_NguyenTranDuong_0006568/public/index.php?url=home/login'); 
         exit();
     }
 }
